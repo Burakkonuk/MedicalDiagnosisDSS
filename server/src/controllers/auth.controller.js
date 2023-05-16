@@ -71,9 +71,14 @@ const me = async (req, res) => {
   return new Response(req.user).success(res);
 };
 
+const algorithm = async (req, res) => {
+  return new Response(req.user).success(res);
+};
+
 
 module.exports = {
   login,
   register,
   me,
+  algorithm
 };
