@@ -23,6 +23,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailToken: {
+      type: String,
+    },
   },
   {
     collection: "users",

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const user = require("../models/user.model");
+const User = require("../models/user.model");
 const APIError = require("../utils/errors");
 
 const createToken = async (user, res) => {
@@ -44,7 +44,21 @@ const tokenCheck = async (req, res, next) => {
   });
 };
 
+const verifyEmail = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user.isVerified) {
+      next();
+    } else {
+      throw new APIError("Please check your email to verify your account", 401);
+    }
+  } catch (error) {
+    throw new APIError("No user found", 401);
+  }
+};
+
 module.exports = {
   createToken,
   tokenCheck,
+  verifyEmail
 };
