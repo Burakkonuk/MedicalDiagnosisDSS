@@ -9,6 +9,8 @@ const TestGroup = require("../models/testGroup.model");
 const Test = require("../models/test.model");
 const Prediagnoses = require("../models/prediagnoses.model");
 const Strategy = require("../models/strategy.model");
+const XLSX = require("xlsx");
+const excelFilePath = "emgalgorithm.xlsx";
 
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -281,13 +283,49 @@ const tooarr = async (req, res) => {
 
     console.log(matrix);
 
-    return res.status(201).send(test1);
+    function readExcelData(filePath) {
+      const workbook = XLSX.readFile(filePath);
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const range = XLSX.utils.decode_range(worksheet["!ref"]);
+      const numRows = range.e.r + 1;
+      const numCols = range.e.c + 1;
+      const data = [];
+
+      for (let i = 5; i < numRows; i++) {
+        const rowData = [];
+        for (let j = 1; j < numCols; j++) {
+          const cellAddress = XLSX.utils.encode_cell({ r: i, c: j });
+          const cellValue = worksheet[cellAddress]?.v;
+          rowData.push(cellValue);
+        }
+        data.push(rowData);
+      }
+
+      return data;
+    }
+
+    // Excel verilerini oku ve 2 boyutlu diziye aktar
+    const excelData = readExcelData(excelFilePath);
+
+    // 2 boyutlu dizideki verileri kontrol et
+
+    for (let i = 0; i < excelData.length; i++) {
+      for (let j = 0; j < excelData[i].length; j++) {
+        if (excelData[i][j] === undefined) {
+          excelData[i][j] = "N/A";
+        }
+      }
+    }
+    console.log(excelData);
+
+    // Elemana eriþim örneði
+    console.log(excelData[0][0]); // Ýlk satýrýn ilk sütunu
+    return res.status(201).send(excelData[0][0]);
   } catch (err) {
     console.log(err);
   }
 };
-
-const findPriorityMean = async (req, res) => {};
 
 const algorithm = async (req, res) => {
   return new Response(req.user).success(res);
