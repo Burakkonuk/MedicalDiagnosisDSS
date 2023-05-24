@@ -82,7 +82,7 @@ const register = async (req, res) => {
       subject: "Verify your email",
       html: `<h2> ${user.name} ${user.lastname}, thanks for registering on our site! </h2>
              <h4> Please verify your email address to continue.. </h4>
-             <a href="http://${req.headers.host}/api/verify-email?token=${user.emailToken}"> Verify your email address </a>
+             <a href="http://${req.headers.host}/verify-email?token=${user.emailToken}"> Verify your email address </a>
       `,
     };
 
@@ -321,7 +321,7 @@ const tooarr = async (req, res) => {
 
     // Elemana eriþim örneði
     console.log(excelData[0][0]); // Ýlk satýrýn ilk sütunu
-    return res.status(201).send(excelData[0][0]);
+    return res.status(201).send(matrix[0][2]);
   } catch (err) {
     console.log(err);
   }

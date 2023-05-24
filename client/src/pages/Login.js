@@ -14,7 +14,7 @@ function Login() {
 
   const onFinish = (values) => {
 
-    Axios.post('http://localhost:5000/api/login', {
+    Axios.post('http://localhost:5000/login', {
       email: values.email,
       password: values.password,
     }).then(() => {
