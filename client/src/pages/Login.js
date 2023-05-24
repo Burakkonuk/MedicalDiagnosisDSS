@@ -1,8 +1,9 @@
 
 import 'antd/dist/reset.css';
-import './App.css';
 import { Button, Form, Input, Row, Card } from 'antd';
 import Axios from 'axios'
+import {useNavigate} from 'react-router-dom';
+import { useEffect } from 'react';
 
 
 
@@ -10,17 +11,22 @@ import Axios from 'axios'
 
 
 
-function Login() {
-
-  const onFinish = (values) => {
-
-    Axios.post('http://localhost:5000/api/login', {
+function Login() { 
+  let navigate = useNavigate();
+  const onFinish = (values) => {  
+   console.log(values.email)
+    Axios.post('http://localhost:5000/login', {
       email: values.email,
       password: values.password,
     }).then(() => {
       alert("successfull insert");
+    }).then(() => {
+      navigate("/home")
+      navigate(0)
     })
-  };  
+  
+
+  }
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };

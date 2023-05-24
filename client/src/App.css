@@ -1,0 +1,20 @@
+.App {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+.appHeader{
+  height: 60px;
+}
+.pageContent{
+  display: flex;
+  flex :8;
+  flex-direction: column;
+  overflow-y:auto;
+  overflow-x: hidden;
+}
+.appFooter{
+  height: 60px;
+  background-color: black;
+}

@@ -11,6 +11,7 @@ const Prediagnoses = require("../models/prediagnoses.model");
 const Strategy = require("../models/strategy.model");
 const XLSX = require("xlsx");
 const excelFilePath = "emgalgorithm.xlsx";
+const cors = require('cors')
 
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -82,7 +83,7 @@ const register = async (req, res) => {
       subject: "Verify your email",
       html: `<h2> ${user.name} ${user.lastname}, thanks for registering on our site! </h2>
              <h4> Please verify your email address to continue.. </h4>
-             <a href="http://${req.headers.host}/api/verify-email?token=${user.emailToken}"> Verify your email address </a>
+             <a href="http://${req.headers.host}/verify-email?token=${user.emailToken}"> Verify your email address </a>
       `,
     };
 
@@ -319,9 +320,9 @@ const tooarr = async (req, res) => {
     }
     console.log(excelData);
 
-    // Elemana erişim örneği
-    console.log(excelData[0][0]); // İlk satırın ilk sütunu
-    return res.status(201).send(excelData[0][0]);
+    // Elemana eriÅŸim Ã¶rneÄŸi
+    console.log(excelData[0][0]); // Ä°lk satÄ±rÄ±n ilk sÃ¼tunu
+    return res.status(201).send(matrix[0][2]);
   } catch (err) {
     console.log(err);
   }

@@ -1,15 +1,8 @@
 
 import 'antd/dist/reset.css';
-import './App.css';
 import { Button, Form, Input, Row, Card } from 'antd';
 import Axios from 'axios'
 import {useNavigate} from 'react-router-dom';
-
-
-
-
-
-
 
 
 function Register() {

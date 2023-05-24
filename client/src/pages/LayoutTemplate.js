@@ -1,11 +1,14 @@
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import React from 'react';
+import medLogo from "../medLogo.png"
 const { Header, Content, Footer, Sider } = Layout;
 const LayoutTemplate = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  
   return (
     <Layout>
       
@@ -20,7 +23,10 @@ const LayoutTemplate = () => {
           console.log(collapsed, type);
         }}
       >
-        <div className="demo-logo-vertical">LOGO</div>
+        <div className="demo-logo-vertical">
+        
+        <img src={medLogo}width="200" height="150" id = "logo"></img>
+        </div>
         <Menu
           theme="light"
           mode="inline"
