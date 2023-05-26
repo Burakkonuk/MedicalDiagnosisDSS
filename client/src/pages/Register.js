@@ -11,7 +11,7 @@ function Register() {
   let navigate = useNavigate();
   const onFinish = (values) => {
     console.log(values.name)
-    Axios.post('http://localhost:5000/api/register', {
+    Axios.post('http://localhost:5000/register', {
       name: values.name, 
       lastname: values.lastname,
       email: values.email,

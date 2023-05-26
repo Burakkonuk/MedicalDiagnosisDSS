@@ -46,7 +46,9 @@ const login = async (req, res) => {
   if (!validatedUser)
     throw new APIError("Email or password is incorrect!", 401);
 
-  createToken(userInfo, res);
+    return new Response(userInfo).success(res);
+
+  //createToken(userInfo, res);
 };
 
 const register = async (req, res) => {
@@ -328,8 +330,19 @@ const tooarr = async (req, res) => {
   }
 };
 
-const algorithm = async (req, res) => {
-  return new Response(req.user).success(res);
+const getUserById = async (req, res) => {
+  try {
+    
+    console.log(req.user);
+
+    const user = await User.find(req.user._id);
+    console.log(user);
+    return new Response(user).success(res);
+
+  } catch (error) {
+    console.log(error);
+  }
+  
 };
 
 module.exports = {
@@ -342,5 +355,5 @@ module.exports = {
   addPrediagnoses,
   addStrategy,
   tooarr,
-  algorithm,
+  getUserById,
 };

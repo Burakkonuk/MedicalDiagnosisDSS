@@ -5,24 +5,24 @@ import Axios from 'axios'
 import {useNavigate} from 'react-router-dom';
 import { useEffect } from 'react';
 
-
-
-
-
-
-
 function Login() { 
+
   let navigate = useNavigate();
+
   const onFinish = (values) => {  
    console.log(values.email)
     Axios.post('http://localhost:5000/login', {
       email: values.email,
       password: values.password,
+    }).then((res) => {
+      console.log(res);
+      localStorage.setItem("userEmail",res.data.data.email);
+      localStorage.setItem("userName",res.data.data.name);
+      localStorage.setItem("userLastname",res.data.data.lastname);
+
     }).then(() => {
-      alert("successfull insert");
-    }).then(() => {
-      navigate("/home")
-      navigate(0)
+      navigate("/home");
+      navigate(0);
     })
   
 

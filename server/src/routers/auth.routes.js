@@ -10,7 +10,7 @@ const {
   addPrediagnoses,
   addStrategy,
   tooarr,
-  algorithm
+  getUserById
 } = require("../controllers/auth.controller");
 const authValidation = require("../middlewares/validations/auth.validation");
 const { tokenCheck, verifyEmail } = require("../middlewares/auth");
@@ -33,6 +33,6 @@ router.post("/add-strategy", addStrategy)
 
 router.get("/temp", tooarr)
 
-router.post("/algorithm", algorithm)
+router.get("/getUserById", getUserById)
 
 module.exports = router;

@@ -1,9 +1,17 @@
 import {Menu} from "antd"
 import {useNavigate} from 'react-router-dom'
+import LogoutOutlined from '@ant-design/icons'
 function AppHeader(){
     const navigate = useNavigate()
     const onMenuClick = (item) =>{
-        navigate(`/${item.key}`);
+
+        if(item.key=="Logout"){
+            localStorage.clear();
+            navigate("/login");
+        }
+        else{
+            navigate(`/${item.key}`);
+        }
     }
 
     return <div className="appHeader">
@@ -22,13 +30,12 @@ function AppHeader(){
             {
                 label: "Diagnose",
                 key: "diagnose",
+            },
+            {   label:"Logout",
+                key:"Logout"
             }
 
         ]}
-    
-    
-    
-    
     
     />
     </div>
