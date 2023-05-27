@@ -324,7 +324,7 @@ const tooarr = async (req, res) => {
 
     // Elemana erişim örneği
     console.log(excelData[0][0]); // İlk satırın ilk sütunu
-    return res.status(201).send(matrix[0][2]);
+    return res.status(201).send(matrix);
   } catch (err) {
     console.log(err);
   }
