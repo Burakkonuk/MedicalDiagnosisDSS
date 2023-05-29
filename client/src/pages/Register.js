@@ -1,9 +1,9 @@
 
 import 'antd/dist/reset.css';
-import { Button, Form, Input, Row, Card } from 'antd';
+import { Button, Form, Input, Row,Typography, Card } from 'antd';
 import Axios from 'axios'
 import {useNavigate} from 'react-router-dom';
-
+import '../App.css'
 
 function Register() {
 
@@ -30,9 +30,10 @@ function Register() {
 
 
   return (
+    <div className='registerContainer'>
     <Row type="flex" justify="center" align="middle" style={{minHeight: '100vh'}}>
 
-      <Card >
+      <Card className='regCardApp'>
       <Form
     name="basic"
     labelCol={{
@@ -41,7 +42,7 @@ function Register() {
     wrapperCol={{
       span: 16,
     }}
-    style={{width: '400px', height: '500px'}}
+    style={{width: '400px', height: '150px',marginLeft:'-40px',marginTop:'10px'}}
     initialValues={{
       remember: true,
     }}
@@ -49,8 +50,9 @@ function Register() {
     onFinishFailed={onFinishFailed}
     autoComplete="off"
   >
+    <Typography.Title style={{marginLeft:'150px',paddingBottom:'20px',paddingTop:'20px'}}>Register!</Typography.Title>
     <Form.Item
-      label="name"
+      label={<span style={{fontWeight:'500'}}>Name</span>}
       name="name"
       rules={[
         {
@@ -64,7 +66,7 @@ function Register() {
 
 
     <Form.Item
-      label="lastname"
+      label={<span style={{fontWeight:'500'}}>Last Name</span>}
       name="lastname"
       rules={[
         {
@@ -77,7 +79,7 @@ function Register() {
     </Form.Item>
 
     <Form.Item
-      label="email"
+      label={<span style={{fontWeight:'500'}}>E-Mail</span>}
       name="email"
       rules={[
         {
@@ -90,7 +92,7 @@ function Register() {
     </Form.Item>
 
     <Form.Item
-      label="password"
+      label={<span style={{fontWeight:'500'}}>Password</span>}
       name="password"
       rules={[
         {
@@ -109,7 +111,7 @@ function Register() {
         span: 16,
       }}
     >
-      <Button type="primary" htmlType="submit">
+      <Button type="primary" htmlType="submit" block>
         Register
       </Button>
       
@@ -122,7 +124,7 @@ function Register() {
    
 
   </Row>
-
+  </div>
   );
 }
 

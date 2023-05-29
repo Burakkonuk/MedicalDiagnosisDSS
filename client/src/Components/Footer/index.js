@@ -1,6 +1,14 @@
+import {LinkedinOutlined,TwitterOutlined,GithubOutlined} from '@ant-design/icons';
+
 function AppFooter(){
     return <div className="appFooter">
-            <h2 style={{textAlign:"center",color:"white"}}>DIAGNOSIS DSS</h2>
+            <b>Follow us on </b>
+            <div className='iconContainer'>
+                <LinkedinOutlined />
+                <TwitterOutlined />
+                <GithubOutlined />
+            </div>
+            
     </div>
 }
 

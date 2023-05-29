@@ -3,6 +3,10 @@
   flex-direction: column;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
+  background: url('./bg.jpg');
+  background-size: cover;
+
 }
 .appHeader{
   height: 60px;
@@ -13,8 +17,45 @@
   flex-direction: column;
   overflow-y:auto;
   overflow-x: hidden;
+  background-color: rgba(179, 179, 209, 0.33);
 }
 .appFooter{
   height: 60px;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0.486);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
+
+.cardApp{
+  width: 425px;
+  height: 450px;
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 255, 0.3);
+  background-color: rgba(88, 132, 228, 0.3);
+  border: none;
+}
+
+
+.regCardApp{
+  width: 425px;
+  height: 450px;
+  box-shadow: 0px 8px 32px 0px rgba(0, 0, 255, 0.3);
+  background-color: rgba(88, 132, 228, 0.3);
+  border: none;
+}
+
+.registerContainer{
+  background: url('./background.jpg');
+  background-size: cover;
+}
+
+.iconContainer{
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 10px;
+}
+

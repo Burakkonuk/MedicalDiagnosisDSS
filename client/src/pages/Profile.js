@@ -20,7 +20,7 @@ function Profile() {
     console.log("usefecetacaspaofk")    
     if(localStorage.getItem("userName")){
       console.log("ifin içi")  
-      setContent(<Row gutter={5}>
+      setContent(<Row gutter={10}>
     
       <Col span={5}>
         <Card title="Name" bordered={true}>
@@ -32,7 +32,7 @@ function Profile() {
         {localStorage.getItem("userLastname")}
         </Card>
       </Col>
-      <Col span={5}>
+      <Col span={10}>
         <Card title="E-mail" bordered={false}>
           {localStorage.getItem("userEmail")}
         </Card>

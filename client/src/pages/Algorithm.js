@@ -4,6 +4,7 @@ import { Card } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, message,Button, Space, Col, Row, Modal,Select  } from 'antd';
 import { jsPDF } from 'jspdf';
+import '../App.css'
 
 function Algorithm() {
 
@@ -164,7 +165,7 @@ function Algorithm() {
 
     return (
         <>
-        <div className='container-fluid bg-dark p-5'>
+        <div className='container-fluid p-5'>
             <div className='row mb-5'>
                 <div className='col-12'>
                     <h3 className='text-light text-center'>{test.length > 0 ? test[localStorage.getItem('testCounter')] : "Test"}</h3>
@@ -172,7 +173,7 @@ function Algorithm() {
             </div>
             <Row>
             {
-                <><Col span={8}>a</Col>
+                <><Col span={8}></Col>
                     <Col span={8}>
                             <Card className='w-100' title={"What is the result of the test   '" + test[localStorage.getItem('testCounter')]+"'"} bordered={false} style={{ width: 300 }}>
                                 <Dropdown
