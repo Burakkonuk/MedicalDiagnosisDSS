@@ -96,15 +96,15 @@ function Algorithm() {
     
     const items = [
         {
-          label: 'P',
+          label: 'P (Pathologic)',
           key: '1',
         },
         {
-          label: 'N',
+          label: 'N (Neurogenic)',
           key: '2',
         },
         {
-          label: 'N/A',
+          label: 'N/A (Non/Applicable)',
           key: '3',
         },
       ];
