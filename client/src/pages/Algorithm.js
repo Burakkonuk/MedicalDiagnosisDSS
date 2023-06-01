@@ -71,7 +71,6 @@ function Algorithm() {
       .then((response) => response.text())
       .then((result) => {
         var obje = JSON.parse(result);
-        console.log(obje);
         setResult(obje);
         setTest(obje[0]);
         if (!localStorage.getItem("testCounter")) {
@@ -80,7 +79,7 @@ function Algorithm() {
         if (!localStorage.getItem("matrixResult")) {
           localStorage.setItem("matrixResult", "");
         }
-
+        console.log(obje);
         // Find the index of the "Priorities" column
         const prioritiesIndex = obje[0].indexOf("Priorities");
 
@@ -90,7 +89,7 @@ function Algorithm() {
         );
 
         // Initialize variables for storing the test and highest mean priority
-        let firstTest = null;
+        let firstTestX = null;
         let highestMeanPriority = -Infinity;
 
         // Iterate over the unique test groups
@@ -116,23 +115,45 @@ function Algorithm() {
                 Math.max(...filteredRows.map((row) => row[prioritiesIndex]))
             );
 
-            firstTest = testWithHighestPriority[0];
+            firstTestX = testWithHighestPriority[0];
           }
         }
-        console.log("First test to be applied:", firstTest);
 
-        var obje = obje.slice(1);
-        const newArray2D = obje.map((subarray) => subarray.slice(0, -1));
+        function deleteColumn(matrix, columnIndex) {
+          for (let i = 0; i < matrix.length; i++) {
+            matrix[i].splice(columnIndex, 1);
+          }
+          return matrix;
+        }
 
-        console.log(newArray2D);
-        // const obj =
-        // {
-        //     "n.fem. cut. Lateralis":{
-        //         "Lesion of the lateral cutaneous nerve of the thigh":"P",
-        //         "Lesion of the lateral cutaneous nerve of the thigh":"P",
-        //         "Lesion of the lateral cutaneous nerve of the thigh":"P",
-        //     }
-        // };
+        console.log(firstTestX);
+        
+        function findNextTest(obje) {
+          const [testNames, ...rows] = obje;
+
+          const firstTest = firstTestX;
+          const firstTestIndex = 6;
+          const rowX = rows[5];
+          const userInput = prompt("Enter N, P, or N/A:");
+          const columnsToBeDeleted = [];
+
+          for (let index = 1; index < rowX.length - 1; index++) {
+            if (userInput != rowX[index]) {
+              columnsToBeDeleted.push(index);
+            }
+          }
+          console.log(columnsToBeDeleted);
+          for (let index = 0; index < columnsToBeDeleted.length; index++) {
+            obje = deleteColumn(obje, columnsToBeDeleted[index]);
+            if (columnsToBeDeleted[index + 1] != null) {
+              columnsToBeDeleted[index + 1] = columnsToBeDeleted[index + 1] - 1;
+            }
+          }
+          console.log(obje);
+        }
+
+        findNextTest(obje);
+
         let arr = [];
         for (let index = 1; index < obje.length; index++) {
           const element = obje[index];
