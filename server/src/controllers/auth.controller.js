@@ -213,118 +213,167 @@ const addStrategy = async (req, res) => {
 
 const tooarr = async (req, res) => {
   try {
-    const test1 = await Test.find();
-    const prediagnoses1 = await Prediagnoses.find();
-    const testGroups = {};
 
-    for (const test of test1) {
-      const { testGroupId, priority } = test;
+    const handWrittenData = [
+      [null,'LESION OF THE LATERAL CUTANEOUS NERVE OF THE THIGH (MERALGIA PARESTHETICA)' , 'FEMORAL NERVE LESION', 'L2-4 RADICULOPATHY','Priorities'],
+      [{name: 'n.fem. cut. Lateralis', testGroupName: 'SNCS'},'P','N','N/A'],
+      [{ name: 'r.cutaneus femoris anterior',testGroupName:'SNCS'},'N/A','P','N/A'],
+      [{ name: 'n. Saphenus',testGroupName:'SNCS'},'N/A','P','N'],
+      [{ name: 'n. Suralis',testGroupName:'SNCS'},'N/A','N','N/A'],
 
-      if (!testGroups[testGroupId]) {
-        testGroups[testGroupId] = { totalPriority: 0, testCount: 0 };
-      }
+      [{ name: 'n.femoralis',testGroupName:'MNCS'},'N/A','P','N'],
+      
+      [{ name: 'm. Add. Magnus',testGroupName:'EMG'},'N','N','P'],
+      [{ name: 'm. Quadriceps',testGroupName:'EMG'},'N','P','P'],
+      [{ name: 'm. Tibialis ant.',testGroupName:'EMG'},'N/A','N','N'],
+      [{ name: 'paravertebral L2-4',testGroupName:'EMG'},'N/A','N','P'],
+    ];
 
-      testGroups[testGroupId].totalPriority += priority;
-      testGroups[testGroupId].testCount++;
-    }
-    const testGroupMeans = {};
+    
 
-    for (const testGroupId in testGroups) {
-      const { totalPriority, testCount } = testGroups[testGroupId];
-      const meanPriority = totalPriority / testCount;
-      testGroupMeans[testGroupId] = meanPriority;
-    }
 
-    test1.sort((a, b) => b.priority - a.priority);
-
-    const testGroups1 = {};
-
-    for (const test of test1) {
-      const { testGroupId } = test;
-
-      if (!testGroups1[testGroupId]) {
-        testGroups1[testGroupId] = [];
-      }
-
-      testGroups1[testGroupId].push(test);
-    }
-
-    const result = [];
-
-    for (const testGroupId in testGroups1) {
-      if (testGroups1.hasOwnProperty(testGroupId)) {
-        result.push(testGroups1[testGroupId]);
-      }
-    }
-    result.sort((a, b) => {
-      const testGroupIdA = a[0].testGroupId;
-      const testGroupIdB = b[0].testGroupId;
-      const valueA = testGroupMeans[testGroupIdA];
-      const valueB = testGroupMeans[testGroupIdB];
-
-      return valueB - valueA;
+    const resultArray = handWrittenData.slice(1).map(row => {
+      const NCount = row.filter(value => value === 'N').length;
+      const PCount = row.filter(value => value === 'P').length;
+      const NACount = row.filter(value => value === 'N/A').length;
+      return ((NCount + 1) * (PCount + 1)) / (NACount + 1);
     });
-    const matrix = [];
-
-    const firstRow = [""];
-    for (const x of result) {
-      for (const y of x) {
-        firstRow.push(y.name);
-      }
+    
+    for (let i = 0; i < resultArray.length; i++) {
+      handWrittenData[i + 1].push(resultArray[i]);
     }
-    matrix.push(firstRow);
+    
+    console.log(handWrittenData);
 
-    for (const prediagnosis of prediagnoses1) {
-      const row = [prediagnosis.name];
 
-      for (let i = 0; i < test1.length; i++) {
-        row.push("");
-      }
+    // const test1 = await Test.find();
+    // const prediagnoses1 = await Prediagnoses.find();
+    // console.log(test1);
+    // const testGroups = {};
+    // for (const test of test1) {
+    //   const { testGroupId, priority } = test;
 
-      matrix.push(row);
-    }
+    //   if (!testGroups[testGroupId]) {
+    //     testGroups[testGroupId] = { totalPriority: 0, testCount: 0 };
+    //   }
 
-    console.log(matrix);
+    //   testGroups[testGroupId].totalPriority += priority;
+    //   testGroups[testGroupId].testCount++;
+    // }
+    // const testGroupMeans = {};
+    // for (const testGroupId in testGroups) {
+    //   const { totalPriority, testCount } = testGroups[testGroupId];
+    //   const meanPriority = totalPriority / testCount;
+    //   testGroupMeans[testGroupId] = meanPriority;
+    // }
+    //test1.sort((a, b) => b.priority - a.priority);
+    
+    // const testGroups1 = {};
 
-    function readExcelData(filePath) {
-      const workbook = XLSX.readFile(filePath);
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-      const range = XLSX.utils.decode_range(worksheet["!ref"]);
-      const numRows = range.e.r + 1;
-      const numCols = range.e.c + 1;
-      const data = [];
+    // for (const test of test1) {
+    //   const { testGroupId } = test;
 
-      for (let i = 5; i < numRows; i++) {
-        const rowData = [];
-        for (let j = 1; j < numCols; j++) {
-          const cellAddress = XLSX.utils.encode_cell({ r: i, c: j });
-          const cellValue = worksheet[cellAddress]?.v;
-          rowData.push(cellValue);
-        }
-        data.push(rowData);
-      }
+    //   if (!testGroups1[testGroupId]) {
+    //     testGroups1[testGroupId] = [];
+    //   }
 
-      return data;
-    }
+    //   testGroups1[testGroupId].push(test);
+    // }
+    
 
-    // Excel verilerini oku ve 2 boyutlu diziye aktar
-    const excelData = readExcelData(excelFilePath);
+    // const result = [];
 
-    // 2 boyutlu dizideki verileri kontrol et
+    // for (const testGroupId in testGroups1) {
+    //   if (testGroups1.hasOwnProperty(testGroupId)) {
+    //     result.push(testGroups1[testGroupId]);
+    //   }
+    // }
+    // result.sort((a, b) => {
+    //   const testGroupIdA = a[0].testGroupId;
+    //   const testGroupIdB = b[0].testGroupId;
+    //   const valueA = testGroupMeans[testGroupIdA];
+    //   const valueB = testGroupMeans[testGroupIdB];
 
-    for (let i = 0; i < excelData.length; i++) {
-      for (let j = 0; j < excelData[i].length; j++) {
-        if (excelData[i][j] === undefined) {
-          excelData[i][j] = "N/A";
-        }
-      }
-    }
-    console.log(excelData);
+    //   return valueB - valueA;
+    // });
+    // const matrix = [];
 
-    // Elemana erişim örneği
-    console.log(excelData[0][0]); // İlk satırın ilk sütunu
-    return res.status(201).send(matrix);
+    // const firstRow = [""];
+    // for (const x of result) {
+    //   for (const y of x) {
+    //     firstRow.push(y.name);
+    //   }
+    // }
+    // matrix.push(firstRow);
+
+    // for (const prediagnosis of prediagnoses1) {
+    //   const row = [prediagnosis.name];
+
+    //   for (let i = 0; i < test1.length; i++) {
+    //     row.push("");
+    //   }
+
+    //   matrix.push(row);
+    //}
+
+    // function readExcelData(filePath) {
+    //   const workbook = XLSX.readFile(filePath);
+    //   const firstSheetName = workbook.SheetNames[0];
+    //   const worksheet = workbook.Sheets[firstSheetName];
+    //   const range = XLSX.utils.decode_range(worksheet["!ref"]);
+    //   const numRows = range.e.r + 1;
+    //   const numCols = range.e.c + 1;
+    //   const data = [];
+
+    //   for (let i = 5; i < numRows; i++) {
+    //     const rowData = [];
+    //     for (let j = 1; j < numCols; j++) {
+    //       const cellAddress = XLSX.utils.encode_cell({ r: i, c: j });
+    //       const cellValue = worksheet[cellAddress]?.v;
+    //       rowData.push(cellValue);
+    //     }
+    //     data.push(rowData);
+    //   }
+
+    //   return data;
+    // }
+    // function newAlgorithm(){
+    //   const combinedMatrix = [];
+    //   // Add the rows with diagnoses and test results
+    //   for (let i = 0; i < excelData.length; i++) {
+    //     const dataRow = [
+          
+    //       i < test1.length ? test1[i].name : '',
+    //       ...excelData[i]
+    //     ];
+    //     combinedMatrix.push(dataRow);
+    //   }
+      
+    //   // Add the header row with empty first cell
+    //   const headerRow = [
+    //     '',
+    //     ...prediagnoses1.map(obj => obj.name)
+    //   ];
+    //   combinedMatrix.unshift(headerRow);
+      
+    //   // Print the combined matrix
+    //   console.log(combinedMatrix);
+    // }
+
+    // // Excel verilerini oku ve 2 boyutlu diziye aktar
+    // const excelData = readExcelData(excelFilePath);
+
+    // // 2 boyutlu dizideki verileri kontrol et
+    // newAlgorithm();
+    // for (let i = 0; i < excelData.length; i++) {
+    //   for (let j = 0; j < excelData[i].length; j++) {
+    //     if (excelData[i][j] === undefined) {
+    //       excelData[i][j] = "N/A";
+    //     }
+    //   }
+    // }
+
+     return res.status(201).send(handWrittenData);
   } catch (err) {
     console.log(err);
   }
