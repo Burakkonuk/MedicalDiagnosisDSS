@@ -11,7 +11,7 @@ const Prediagnoses = require("../models/prediagnoses.model");
 const Strategy = require("../models/strategy.model");
 const XLSX = require("xlsx");
 const excelFilePath = "emgalgorithm.xlsx";
-const cors = require('cors')
+const cors = require("cors");
 
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -46,7 +46,7 @@ const login = async (req, res) => {
   if (!validatedUser)
     throw new APIError("Email or password is incorrect!", 401);
 
-    return new Response(userInfo).success(res);
+  return new Response(userInfo).success(res);
 
   //createToken(userInfo, res);
 };
@@ -283,7 +283,7 @@ const tooarr = async (req, res) => {
 
       matrix.push(row);
     }
-
+      
     console.log(matrix);
 
     function readExcelData(filePath) {
@@ -332,17 +332,14 @@ const tooarr = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    
     console.log(req.user);
 
     const user = await User.find(req.user._id);
     console.log(user);
     return new Response(user).success(res);
-
   } catch (error) {
     console.log(error);
   }
-  
 };
 
 module.exports = {
