@@ -24,6 +24,7 @@ function Algorithm() {
   const [currentsonuc, setCurrentSonuc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedKey, setSelectedKey] = useState({});
+  let testsToBeDone = [];
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -79,7 +80,6 @@ function Algorithm() {
         if (!localStorage.getItem("matrixResult")) {
           localStorage.setItem("matrixResult", "");
         }
-        console.log(obje);
         // Find the index of the "Priorities" column
         const prioritiesIndex = obje[0].indexOf("Priorities");
 
@@ -126,14 +126,20 @@ function Algorithm() {
           return matrix;
         }
 
-        console.log(firstTestX);
-        
+        let firstTest = firstTestX;
+        let rowX = 0;
+
         function findNextTest(obje) {
           const [testNames, ...rows] = obje;
 
-          const firstTest = firstTestX;
-          const firstTestIndex = 6;
-          const rowX = rows[5];
+          for (let i = 0; i < rows.length; i++) {
+            if (rows[i][0].name === firstTest.name) {
+              rowX = rows[i];
+            }
+          }
+
+          console.log(rowX);
+
           const userInput = prompt("Enter N, P, or N/A:");
           const columnsToBeDeleted = [];
 
@@ -142,18 +148,54 @@ function Algorithm() {
               columnsToBeDeleted.push(index);
             }
           }
-          console.log(columnsToBeDeleted);
+
           for (let index = 0; index < columnsToBeDeleted.length; index++) {
             obje = deleteColumn(obje, columnsToBeDeleted[index]);
             if (columnsToBeDeleted[index + 1] != null) {
               columnsToBeDeleted[index + 1] = columnsToBeDeleted[index + 1] - 1;
             }
           }
-          console.log(obje);
+
+          if (obje[0].length === 3) {
+            // IF THERE IS ONLY ONE COLUMN LEFT IN THE EXCEL
+            const foundTestGroupNames = []; // TEST GROUPS TO BE DONE.
+            for (let i = 1; i < obje.length; i++) {
+              const firstElement = obje[i][0];
+              const testFinder = obje[i][1];
+              const testGroupName = firstElement.testGroupName;
+              if (
+                !foundTestGroupNames.includes(testGroupName) &&
+                testFinder != "N/A"
+              ) {
+                foundTestGroupNames.push(testGroupName);
+              }
+            }
+            console.log(foundTestGroupNames);
+            for (let index = 0; index < foundTestGroupNames.length; index++) {
+              if (foundTestGroupNames[index] === firstTest.testGroupName) {
+                const temp = foundTestGroupNames[0];
+                foundTestGroupNames[0] = firstTest.testGroupName;
+                foundTestGroupNames[index] = temp;
+              }
+            }
+
+            for (let i = 0; i < foundTestGroupNames.length; i++) {
+              for (let j = 1; j < obje.length; j++) {
+                if (
+                  !testsToBeDone.includes(obje[j]) &&
+                  obje[j][0].testGroupName === foundTestGroupNames[i] &&
+                  obje[j][1] != "N/A"
+                ) {
+                  testsToBeDone.push(obje[j]);
+                }
+              }
+            }
+            console.log(testsToBeDone);
+          }
         }
-
+        console.log("çalıştı hocam");
         findNextTest(obje);
-
+        console.log(obje);
         let arr = [];
         for (let index = 1; index < obje.length; index++) {
           const element = obje[index];
@@ -249,7 +291,7 @@ function Algorithm() {
                   className="w-100"
                   title={
                     "What is the result of the test   '" +
-                    test[localStorage.getItem("testCounter")] +
+                    testsToBeDone[1] +
                     "'"
                   }
                   bordered={false}
