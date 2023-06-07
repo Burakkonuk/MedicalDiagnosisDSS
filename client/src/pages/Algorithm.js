@@ -72,7 +72,7 @@ function Algorithm() {
       .then((result) => {
         var obje = JSON.parse(result);
         setResult(obje);
-        setTest(obje[0]);
+        setTest(obje[1][0].name);
         if (!localStorage.getItem("testCounter")) {
           localStorage.setItem("testCounter", 1);
         }
@@ -116,6 +116,7 @@ function Algorithm() {
             );
 
             firstTestX = testWithHighestPriority[0];
+            setTest(firstTestX);
           }
         }
 
@@ -124,32 +125,6 @@ function Algorithm() {
             matrix[i].splice(columnIndex, 1);
           }
           return matrix;
-        }
-
-        console.log(firstTestX);
-        
-        function findNextTest(obje) {
-          const [testNames, ...rows] = obje;
-
-          const firstTest = firstTestX;
-          const firstTestIndex = 6;
-          const rowX = rows[5];
-          const userInput = prompt("Enter N, P, or N/A:");
-          const columnsToBeDeleted = [];
-
-          for (let index = 1; index < rowX.length - 1; index++) {
-            if (userInput != rowX[index]) {
-              columnsToBeDeleted.push(index);
-            }
-          }
-          console.log(columnsToBeDeleted);
-          for (let index = 0; index < columnsToBeDeleted.length; index++) {
-            obje = deleteColumn(obje, columnsToBeDeleted[index]);
-            if (columnsToBeDeleted[index + 1] != null) {
-              columnsToBeDeleted[index + 1] = columnsToBeDeleted[index + 1] - 1;
-            }
-          }
-          console.log(obje);
         }
 
         findNextTest(obje);
@@ -179,7 +154,29 @@ function Algorithm() {
       key: "3",
     },
   ];
+  function findNextTest(obje) {
+    const [testNames, ...rows] = obje;
 
+    const firstTest = test;
+    const firstTestIndex = 6;
+    const rowX = rows[5];
+    const userInput = prompt("Enter N, P, or N/A:");
+    const columnsToBeDeleted = [];
+
+    for (let index = 1; index < rowX.length - 1; index++) {
+      if (userInput != rowX[index]) {
+        columnsToBeDeleted.push(index);
+      }
+    }
+    console.log(columnsToBeDeleted);
+    for (let index = 0; index < columnsToBeDeleted.length; index++) {
+      obje = deleteColumn(obje, columnsToBeDeleted[index]);
+      if (columnsToBeDeleted[index + 1] != null) {
+        columnsToBeDeleted[index + 1] = columnsToBeDeleted[index + 1] - 1;
+      }
+    }
+    console.log(obje);
+  }
   const onClick = ({ key }) => {
     const obje = {};
     for (let i = 0; i < items.length; i++) {
@@ -203,29 +200,6 @@ function Algorithm() {
         flag = false;
       }
     }
-    if (Object.keys(StageResult).length == 1 || flag) {
-      var temp = localStorage.getItem("matrixResult");
-      if (temp == "") {
-        let temp2 = {};
-        temp2[test[localStorage.getItem("testCounter")]] = StageResult;
-        const myJSON = JSON.stringify(temp2);
-        localStorage.setItem("matrixResult", myJSON);
-      } else {
-        let json_matrix = JSON.parse(temp);
-        json_matrix[test[localStorage.getItem("testCounter")]] = StageResult;
-        const myJSON = JSON.stringify(json_matrix);
-        localStorage.setItem("matrixResult", myJSON);
-      }
-      for (let index = 0; index < diseases.length; index++) {
-        const element = diseases[index][0];
-        localStorage.removeItem(element);
-      }
-      var test_counter = +localStorage.getItem("testCounter") + 1;
-      localStorage.setItem("testCounter", test_counter);
-      window.location.reload();
-    } else {
-      showModal();
-    }
   };
 
   return (
@@ -247,11 +221,7 @@ function Algorithm() {
               <Col span={8}>
                 <Card
                   className="w-100"
-                  title={
-                    "What is the result of the test   '" +
-                    test[localStorage.getItem("testCounter")] +
-                    "'"
-                  }
+                  title={"What is the result of the test   '" + test + "'"}
                   bordered={false}
                   style={{ width: 300 }}
                 >
