@@ -11,7 +11,7 @@ const Prediagnoses = require("../models/prediagnoses.model");
 const Strategy = require("../models/strategy.model");
 const XLSX = require("xlsx");
 const excelFilePath = "emgalgorithm.xlsx";
-const cors = require('cors')
+const cors = require("cors");
 
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -46,7 +46,7 @@ const login = async (req, res) => {
   if (!validatedUser)
     throw new APIError("Email or password is incorrect!", 401);
 
-    return new Response(userInfo).success(res);
+  return new Response(userInfo).success(res);
 
   //createToken(userInfo, res);
 };
@@ -213,38 +213,49 @@ const addStrategy = async (req, res) => {
 
 const tooarr = async (req, res) => {
   try {
-
     const handWrittenData = [
-      [null,'LESION OF THE LATERAL CUTANEOUS NERVE OF THE THIGH (MERALGIA PARESTHETICA)' , 'FEMORAL NERVE LESION', 'L2-4 RADICULOPATHY','Priorities'],
-      [{name: 'n.fem. cut. Lateralis', testGroupName: 'SNCS'},'P','N','N/A'],
-      [{ name: 'r.cutaneus femoris anterior',testGroupName:'SNCS'},'N/A','P','N/A'],
-      [{ name: 'n. Saphenus',testGroupName:'SNCS'},'N/A','P','N'],
-      [{ name: 'n. Suralis',testGroupName:'SNCS'},'N/A','N','N/A'],
+      [
+        null,
+        "LESION OF THE LATERAL CUTANEOUS NERVE OF THE THIGH (MERALGIA PARESTHETICA)",
+        "FEMORAL NERVE LESION",
+        "L2-4 RADICULOPATHY",
+        "Priorities",
+      ],
+      [
+        { name: "n.fem. cut. Lateralis", testGroupName: "SNCS" },
+        "P",
+        "N",
+        "N/A",
+      ],
+      [
+        { name: "r.cutaneus femoris anterior", testGroupName: "SNCS" },
+        "N/A",
+        "P",
+        "N/A",
+      ],
+      [{ name: "n. Saphenus", testGroupName: "SNCS" }, "N/A", "P", "N"],
+      [{ name: "n. Suralis", testGroupName: "SNCS" }, "N/A", "N", "N/A"],
 
-      [{ name: 'n.femoralis',testGroupName:'MNCS'},'N/A','P','N'],
-      
-      [{ name: 'm. Add. Magnus',testGroupName:'EMG'},'N','N','P'],
-      [{ name: 'm. Quadriceps',testGroupName:'EMG'},'N','P','P'],
-      [{ name: 'm. Tibialis ant.',testGroupName:'EMG'},'N/A','N','N'],
-      [{ name: 'paravertebral L2-4',testGroupName:'EMG'},'N/A','N','P'],
+      [{ name: "n.femoralis", testGroupName: "MNCS" }, "N/A", "P", "N"],
+
+      [{ name: "m. Add. Magnus", testGroupName: "EMG" }, "N", "N", "P"],
+      [{ name: "m. Quadriceps", testGroupName: "EMG" }, "N", "P", "P"],
+      [{ name: "m. Tibialis ant.", testGroupName: "EMG" }, "N/A", "N", "N"],
+      [{ name: "paravertebral L2-4", testGroupName: "EMG" }, "N/A", "N", "P"],
     ];
 
-    
-
-
-    const resultArray = handWrittenData.slice(1).map(row => {
-      const NCount = row.filter(value => value === 'N').length;
-      const PCount = row.filter(value => value === 'P').length;
-      const NACount = row.filter(value => value === 'N/A').length;
+    const resultArray = handWrittenData.slice(1).map((row) => {
+      const NCount = row.filter((value) => value === "N").length;
+      const PCount = row.filter((value) => value === "P").length;
+      const NACount = row.filter((value) => value === "N/A").length;
       return ((NCount + 1) * (PCount + 1)) / (NACount + 1);
     });
-    
+
     for (let i = 0; i < resultArray.length; i++) {
       handWrittenData[i + 1].push(resultArray[i]);
     }
-    
-    console.log(handWrittenData);
 
+    console.log(handWrittenData);
 
     // const test1 = await Test.find();
     // const prediagnoses1 = await Prediagnoses.find();
@@ -267,7 +278,7 @@ const tooarr = async (req, res) => {
     //   testGroupMeans[testGroupId] = meanPriority;
     // }
     //test1.sort((a, b) => b.priority - a.priority);
-    
+
     // const testGroups1 = {};
 
     // for (const test of test1) {
@@ -279,7 +290,6 @@ const tooarr = async (req, res) => {
 
     //   testGroups1[testGroupId].push(test);
     // }
-    
 
     // const result = [];
 
@@ -342,20 +352,20 @@ const tooarr = async (req, res) => {
     //   // Add the rows with diagnoses and test results
     //   for (let i = 0; i < excelData.length; i++) {
     //     const dataRow = [
-          
+
     //       i < test1.length ? test1[i].name : '',
     //       ...excelData[i]
     //     ];
     //     combinedMatrix.push(dataRow);
     //   }
-      
+
     //   // Add the header row with empty first cell
     //   const headerRow = [
     //     '',
     //     ...prediagnoses1.map(obj => obj.name)
     //   ];
     //   combinedMatrix.unshift(headerRow);
-      
+
     //   // Print the combined matrix
     //   console.log(combinedMatrix);
     // }
@@ -373,7 +383,7 @@ const tooarr = async (req, res) => {
     //   }
     // }
 
-     return res.status(201).send(handWrittenData);
+    return res.status(201).send(handWrittenData);
   } catch (err) {
     console.log(err);
   }
@@ -381,17 +391,14 @@ const tooarr = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    
     console.log(req.user);
 
     const user = await User.find(req.user._id);
     console.log(user);
     return new Response(user).success(res);
-
   } catch (error) {
     console.log(error);
   }
-  
 };
 
 module.exports = {
