@@ -44,6 +44,19 @@ function Algorithm() {
     return matrix;
   }
 
+  function findTestGroups(matrix) {
+    foundTestGroupNames = [];
+    for (let i = 1; i < matrix.length; i++) {
+      const firstElement = matrix[i][0];
+      const testFinder = matrix[i][1];
+
+      const testGroupName = firstElement.testGroupName;
+      if (!foundTestGroupNames.includes(testGroupName) && testFinder != "N/A") {
+        foundTestGroupNames.push(testGroupName);
+      }
+    }
+  }
+
   let firstTest = test;
   let rowX = 0;
 
@@ -78,16 +91,7 @@ function Algorithm() {
     deleteRow(obje, test);
     console.log(obje);
     // yapılan test silinecek row
-    foundTestGroupNames = [];
-    for (let i = 1; i < obje.length; i++) {
-      const firstElement = obje[i][0];
-      const testFinder = obje[i][0];
-
-      const testGroupName = firstElement.testGroupName;
-      if (!foundTestGroupNames.includes(testGroupName) && testFinder != "N/A") {
-        foundTestGroupNames.push(testGroupName);
-      }
-    }
+    findTestGroups(obje);
     console.log(foundTestGroupNames);
 
     if (foundTestGroupNames.includes(currentTestGroup)) {
@@ -99,25 +103,42 @@ function Algorithm() {
             break;
           }
           // BURAYA VE KOYUP N/A DEĞİL DİYE KONTROL ETTİRİRSEK İLK EXCEL İÇİN ÇALIŞIR.
-          setTest(obje[i][0]);
-          break;
         }
       }
     } else {
+      findTestGroups(obje);
       currentTestGroup = foundTestGroupNames[0];
-
       console.log(currentTestGroup);
       console.log(obje);
       for (let i = 1; i < obje.length; i++) {
         console.log(currentTestGroup);
         if (obje[i][0].testGroupName === currentTestGroup) {
           if (obje[0].length === 3 && obje[i][1] != "N/A") {
+            console.log("32");
             // EĞER TEK COLUMNA DÜŞTÜYSE
             setTest(obje[i][0]);
             break;
           }
-          // BURAYA VE KOYUP N/A DEĞİL DİYE KONTROL ETTİRİRSEK İLK EXCEL İÇİN ÇALIŞIR.
-          setTest(obje[i][0]);
+        }
+      }
+    }
+    let doesExit = false;
+    if (foundTestGroupNames.includes(currentTestGroup)) {
+      for (let i = 1; i < obje.length; i++) {
+        for (let j = 1; j < obje.length; j++) {
+          if (obje[i][0].testGroupName === currentTestGroup) {
+            if (
+              obje[0].length > 3 &&
+              (obje[i][j] === "P" || obje[i][j] === "N")
+            ) {
+              setTest(obje[i][0]);
+              console.log(test);
+              doesExit = true;
+              break;
+            }
+          }
+        }
+        if (doesExit) {
           break;
         }
       }
