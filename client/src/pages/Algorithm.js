@@ -13,10 +13,14 @@ import {
   Select,
 } from "antd";
 import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 import "../App.css";
 var obje = "";
 var foundTestGroupNames = []; // TEST GROUPS TO BE DONE.
 var currentTestGroup = "";
+var testsToExport = [];
+var testResults = [];
+var testCounter = 0;
 function Algorithm() {
   const [result, setResult] = useState([]);
   const [test, setTest] = useState("");
@@ -63,15 +67,12 @@ function Algorithm() {
   function findNextTest(objectToChange) {
     const [testNames, ...rows] = objectToChange;
 
-    console.log(objectToChange);
     for (let i = 0; i < rows.length; i++) {
       if (rows[i][0].name === firstTest.name) {
         rowX = rows[i];
       }
     }
-    console.log(rowX);
 
-    console.log(localStorage.getItem("currentSonuc"));
     const userInput = localStorage.getItem("currentSonuc");
     const columnsToBeDeleted = [];
 
@@ -100,6 +101,7 @@ function Algorithm() {
           if (obje[0].length === 3 && obje[i][1] != "N/A") {
             // EĞER TEK COLUMNA DÜŞTÜYSE
             setTest(obje[i][0]);
+            testsToExport.push(obje[i][0].name);
             break;
           }
           // BURAYA VE KOYUP N/A DEĞİL DİYE KONTROL ETTİRİRSEK İLK EXCEL İÇİN ÇALIŞIR.
@@ -108,15 +110,13 @@ function Algorithm() {
     } else {
       findTestGroups(obje);
       currentTestGroup = foundTestGroupNames[0];
-      console.log(currentTestGroup);
       console.log(obje);
       for (let i = 1; i < obje.length; i++) {
-        console.log(currentTestGroup);
         if (obje[i][0].testGroupName === currentTestGroup) {
           if (obje[0].length === 3 && obje[i][1] != "N/A") {
-            console.log("32");
             // EĞER TEK COLUMNA DÜŞTÜYSE
             setTest(obje[i][0]);
+            testsToExport.push(obje[i][0].name);
             break;
           }
         }
@@ -132,7 +132,7 @@ function Algorithm() {
               (obje[i][j] === "P" || obje[i][j] === "N")
             ) {
               setTest(obje[i][0]);
-              console.log(test);
+              testsToExport.push(obje[i][0].name);
               doesExit = true;
               break;
             }
@@ -162,7 +162,9 @@ function Algorithm() {
     var doc = new jsPDF();
     const pageSize = doc.internal.pageSize;
     const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
+    var tableData = [];
 
+    var body = [["Tests Done", "Results"], testsToExport, testResults];
     const array = localStorage.getItem("matrixResult").split(",");
     const pageCount = doc.internal.pages.length;
     for (let i = 1; i < pageCount; i++) {
@@ -172,15 +174,47 @@ function Algorithm() {
       doc.setTextColor("#000000");
 
       doc.setFontSize(10);
-      doc.setTextColor("#000D7A");
-
-      doc.text(100, 20, array, "center");
+      doc.text(20, 25, "Document Prepared By:");
+      doc.setFontSize(25);
+      doc.text(60, 13, "Medical Diagnosis DSS");
+      doc.setFontSize(10);
+      doc.text(
+        20,
+        30,
+        localStorage.getItem("userName") +
+          " " +
+          localStorage.getItem("userLastname")
+      );
+      doc.setTextColor("black");
+      doc.text(90, 270, "DSS IS THE FUTURE");
+      doc.text(80, 275, "By: Burak Konuk, Ali Haydar Aslan");
+      if (testsToExport.length === testCounter) {
+        for (var j = 0; j < testsToExport.length; j++) {
+          if (j === 0) {
+            tableData.push([["Tests Applied"], ["Results"]]);
+          }
+          tableData.push([testsToExport[j], testResults[j]]);
+        }
+      } else {
+        testsToExport.pop();
+        for (var k = 0; k < testsToExport.length; k++) {
+          if (k === 0) {
+            tableData.push([["Tests Applied"], ["Results"]]);
+          }
+          tableData.push([testsToExport[k], testResults[k]]);
+        }
+      }
+      doc.autoTable({
+        body: tableData,
+        startY: 50,
+        theme: "grid",
+      });
     }
     doc.save();
   };
 
   useEffect(() => {
-    console.log("USE EFFECT ÇALIŞTI");
+    setSelectedKey("x");
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var requestOptions = {
@@ -206,7 +240,6 @@ function Algorithm() {
             foundTestGroupNames.push(testGroupName);
           }
         }
-        console.log(foundTestGroupNames);
 
         if (!localStorage.getItem("testCounter")) {
           localStorage.setItem("testCounter", 1);
@@ -253,6 +286,7 @@ function Algorithm() {
           }
         }
         setTest(firstTestX);
+        testsToExport.push(firstTestX.name);
         currentTestGroup = firstTestX.testGroupName;
 
         console.log(obje);
@@ -269,10 +303,6 @@ function Algorithm() {
       label: "N",
       key: "2",
     },
-    {
-      label: "N/A",
-      key: "3",
-    },
   ];
 
   const onClick = ({ key }) => {
@@ -286,11 +316,22 @@ function Algorithm() {
     }
     const temp = StageResult;
     setStageResult(temp);
+
     localStorage.setItem("currentSonuc", tempObject[currentsonuc]);
   };
   const onSubmit = () => {
-    setSelectedKey("x");
-    findNextTest(obje);
+    console.log(selectedKey);
+    if (selectedKey === "x") {
+      showModal();
+    } else {
+      setSelectedKey("x");
+      findNextTest(obje);
+      if (localStorage.getItem("currentSonuc") === "P") {
+        testResults.push("Pathologic");
+      } else {
+        testResults.push("Normal");
+      }
+    }
   };
 
   return (
@@ -369,6 +410,7 @@ function Algorithm() {
             <Button
               onClick={() => {
                 onSubmit();
+                testCounter++;
               }}
               type="primary"
               block
