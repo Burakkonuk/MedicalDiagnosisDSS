@@ -7,17 +7,17 @@ class authValidation {
     try {
       await joi
         .object({
-          name: joi.string().trim().min(3).max(100).required().messages({
+          name: joi.string().trim().min(2).max(100).required().messages({
             "string.base": "Name field must be regular text!",
             "string.empty": "Name field can't be empty!",
-            "string.min": "Name must be at least 3 characters!",
+            "string.min": "Name must be at least 2 characters!",
             "string.max": "Name must be maximum 50 character!",
             "string.required": "Name field is required!",
           }),
-          lastname: joi.string().trim().min(3).max(100).required().messages({
+          lastname: joi.string().trim().min(2).max(100).required().messages({
             "string.base": "Lastname field must be regular text!",
             "string.empty": "Lastname field can't be empty!",
-            "string.min": "Lastname must be at least 3 characters!",
+            "string.min": "Lastname must be at least 2 characters!",
             "string.max": "Lastname must be maximum 50 character!",
             "string.required": "Lastname field is required!",
           }),

@@ -29,9 +29,9 @@ function Home() {
   const data = [
     {
       key: "STRATEGY",
-      name: "John Brown",
-      age: 32,
-      tel: "0571-22098909",
+      name: "Demonstrate abnormality of the lateral cutaneous nerve of the thigh at the superior anterior iliac spine",
+      age: "Demonstrate neurogenic EMG findings in muscles innervated by the femoral nerve and abnormal SNC findings in n.saphenus and r.cutaneus femoris anterior -differentiate from lumbar plexus lesion and L2-L4 radiculopathy",
+      tel: "demonstrate neurogenic EMG findings in L2-L4 innervated muscles - examine muscles innervated by the adjacent roots",
     },
     {
       key: "2",

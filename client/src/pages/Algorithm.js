@@ -20,6 +20,7 @@ var foundTestGroupNames = []; // TEST GROUPS TO BE DONE.
 var currentTestGroup = "";
 var testsToExport = [];
 var testResults = [];
+var currentPossible = [];
 var testCounter = 0;
 function Algorithm() {
   const [result, setResult] = useState([]);
@@ -227,7 +228,9 @@ function Algorithm() {
       .then((response) => response.text())
       .then((result) => {
         obje = JSON.parse(result);
-
+        for (let k = 1; k < obje[0].length - 1; k++) {
+          currentPossible.push(obje[0][k]);
+        }
         for (let i = 1; i < obje.length; i++) {
           const firstElement = obje[i][0];
           const testFinder = obje[i][0];
@@ -326,6 +329,10 @@ function Algorithm() {
     } else {
       setSelectedKey("x");
       findNextTest(obje);
+      currentPossible.length = 0;
+      for (let k = 1; k < obje[0].length - 1; k++) {
+        currentPossible.push(obje[0][k] + "\n");
+      }
       if (localStorage.getItem("currentSonuc") === "P") {
         testResults.push("Pathologic");
       } else {
@@ -340,9 +347,7 @@ function Algorithm() {
         <div className="row mb-5">
           <div className="col-12">
             <h3 className="text-light text-center">
-              {test.length > 0
-                ? test[localStorage.getItem("testCounter")]
-                : "Test"}
+              Current Test Group: {currentTestGroup}
             </h3>
           </div>
         </div>
@@ -432,7 +437,29 @@ function Algorithm() {
             </Button>
           </div>
         </div>
+        <div className="row mt-5 justify-content-center">
+          <div className="col-12 w-25">
+            <h3 className="text-blue text-center">Current Possible Diseases</h3>
+          </div>
+        </div>
+        <div
+          className="row mt-5 justify-content-center"
+        >
+          <div className="col-12 w-30 text-center">
+            {currentPossible.map((item, index) => (
+              <span
+                key={index}
+                className="text-center"
+                style={{ color: "red", fontWeight: "bold" }}
+              >
+                {item}
+                <br />
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
+
       <Modal
         title="Warning"
         open={isModalOpen}
