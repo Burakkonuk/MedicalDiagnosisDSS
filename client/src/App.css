@@ -4,22 +4,21 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: url('./bg.jpg');
+  background: url("./bg.jpg");
   background-size: cover;
-
 }
-.appHeader{
+.appHeader {
   height: 60px;
 }
-.pageContent{
+.pageContent {
   display: flex;
-  flex :8;
+  flex: 8;
   flex-direction: column;
-  overflow-y:auto;
+  overflow-y: auto;
   overflow-x: hidden;
   background-color: rgba(179, 179, 209, 0.33);
 }
-.appFooter{
+.appFooter {
   height: 60px;
   background-color: rgba(0, 0, 0, 0.486);
   display: flex;
@@ -29,7 +28,7 @@
   align-items: center;
 }
 
-.cardApp{
+.cardApp {
   width: 425px;
   height: 450px;
   box-shadow: 0px 8px 32px 0px rgba(0, 0, 255, 0.3);
@@ -37,8 +36,7 @@
   border: none;
 }
 
-
-.regCardApp{
+.regCardApp {
   width: 425px;
   height: 450px;
   box-shadow: 0px 8px 32px 0px rgba(0, 0, 255, 0.3);
@@ -46,16 +44,15 @@
   border: none;
 }
 
-.registerContainer{
-  background: url('./background.jpg');
+.registerContainer {
+  background: url("./background.jpg");
   background-size: cover;
 }
 
-.iconContainer{
+.iconContainer {
   font-size: 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   column-gap: 10px;
 }
-
