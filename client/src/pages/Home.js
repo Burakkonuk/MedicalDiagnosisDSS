@@ -34,28 +34,76 @@ function Home() {
       tel: "demonstrate neurogenic EMG findings in L2-L4 innervated muscles - examine muscles innervated by the adjacent roots",
     },
     {
-      key: "2",
-      name: "Jim Green",
-      age: 42,
-      tel: "0571-22098333",
+      key: "sensory nerve conduction studies",
+      name: "",
+      age: "",
+      tel: "",
     },
     {
-      key: "3",
-      name: "Joe Black",
-      age: 32,
-      tel: "0575-22098909",
+      key: "SNCS: n.fem. cut. Lateralis (4)",
+      name: "P",
+      age: "N",
+      tel: "",
     },
     {
-      key: "4",
-      name: "Jim Red",
-      age: 18,
-      tel: "0575-22098909",
+      key: "SNCS: r.cutaneus femoris anterior (4)",
+      name: "",
+      age: "P",
+      tel: "",
     },
     {
-      key: "5",
-      name: "Jake White",
-      age: 18,
-      tel: "0575-22098909",
+      key: "SNCS: n. Saphenus (4)",
+      name: "",
+      age: "P",
+      tel: "N",
+    },
+    {
+      key: "SNCS: n. Suralis (2)",
+      name: "",
+      age: "N",
+      tel: "",
+    },
+    {
+      key: "motor nerve conduction studies",
+      name: "",
+      age: "",
+      tel: "",
+    },
+    {
+      key: "MNCS: n.femoralis (2)",
+      name: "",
+      age: "P",
+      tel: "N",
+    },
+    {
+      key: "electromyography",
+      name: "",
+      age: "",
+      tel: "",
+    },
+    {
+      key: "EMG: m. Add. Magnus (3)",
+      name: "N",
+      age: "N",
+      tel: "P",
+    },
+    {
+      key: "EMG: m. Quadriceps (3)",
+      name: "N",
+      age: "P",
+      tel: "P",
+    },
+    {
+      key: "EMG: m. Tibialis ant.(3)",
+      name: "",
+      age: "N",
+      tel: "N",
+    },
+    {
+      key: "EMG: paravertebral L2-4 (4)",
+      name: "",
+      age: "N",
+      tel: "P",
     },
   ];
 
@@ -72,13 +120,14 @@ function Home() {
     },
     {
       key: "tab2",
-      tab: "Numbness of the radial fingers (1-3)",
+      tab: "Numbness of the radial fingers [1-3] (Coming Soon)",
+      disabled: true,
     },
   ];
   const contentList = {
     tab1: (
       <p>
-        <Table dataSource={data} columns={columns} />;
+        <Table dataSource={data} columns={columns} pagination={false} />
       </p>
     ),
     tab2: <p>content2</p>,

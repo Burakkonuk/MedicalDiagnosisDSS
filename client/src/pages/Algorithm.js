@@ -2,6 +2,7 @@ import Axios from "axios";
 import { useEffect, useState } from "react";
 import { Card } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import {
   Dropdown,
   message,
@@ -11,17 +12,20 @@ import {
   Row,
   Modal,
   Select,
+  Tooltip,
 } from "antd";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import "../App.css";
 var obje = "";
+var firstObje = "";
 var foundTestGroupNames = []; // TEST GROUPS TO BE DONE.
 var currentTestGroup = "";
 var testsToExport = [];
 var testResults = [];
 var currentPossible = [];
 var testCounter = 0;
+var finalDisease = "";
 function Algorithm() {
   const [result, setResult] = useState([]);
   const [test, setTest] = useState("");
@@ -31,8 +35,10 @@ function Algorithm() {
   const [currentsonuc, setCurrentSonuc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedKey, setSelectedKey] = useState({});
+  const [isFinished, setIsFinished] = useState(false);
+  const [isFinishedWrong, setIsFinishedWrong] = useState(false);
   let testsToBeDone = [];
-
+  let navigate = useNavigate();
   function deleteColumn(matrix, columnIndex) {
     for (let i = 0; i < matrix.length; i++) {
       matrix[i].splice(columnIndex, 1);
@@ -146,6 +152,27 @@ function Algorithm() {
     }
   }
 
+  function finishedOrNot() {
+    var flag = false;
+    for (let i = 1; i < obje.length; i++) {
+      for (let j = 0; j < obje[0].length; j++) {
+        if (obje[i][j] === "N" || obje[i][j] === "P") {
+          flag = true;
+        }
+      }
+    }
+
+    if (!flag) {
+      if (currentPossible.length != 0) {
+        console.log(currentPossible);
+        finalDisease = currentPossible[0];
+        setIsFinished(true);
+      } else {
+        setIsFinishedWrong(true);
+      }
+    }
+  }
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -153,10 +180,29 @@ function Algorithm() {
   const handleOk = () => {
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const handelFinishOk = () => {
+    setIsFinished(false);
+    navigate(0);
+  };
+
+  const handleFinishCancel = () => {
+    setIsFinished(false);
+    navigate(0);
+  };
+
+  const handleFinishWrongCancel = () => {
+    setIsFinishedWrong(false);
+    navigate(0);
+  };
+  const handleFinishWrongOk = () => {
+    setIsFinishedWrong(false);
+    navigate(0);
+  };
+
   const { Option } = Select;
 
   const onExport = () => {
@@ -164,7 +210,8 @@ function Algorithm() {
     const pageSize = doc.internal.pageSize;
     const pageWidth = pageSize.width ? pageSize.width : pageSize.getWidth();
     var tableData = [];
-
+    console.log(testsToExport);
+    console.log(testResults);
     var body = [["Tests Done", "Results"], testsToExport, testResults];
     const array = localStorage.getItem("matrixResult").split(",");
     const pageCount = doc.internal.pages.length;
@@ -210,6 +257,10 @@ function Algorithm() {
         startY: 50,
         theme: "grid",
       });
+      doc.setTextColor("red");
+      doc.setFontSize(12);
+      doc.text(20, 155, "Final Disease");
+      doc.text(20, 160, finalDisease);
     }
     doc.save();
   };
@@ -228,6 +279,7 @@ function Algorithm() {
       .then((response) => response.text())
       .then((result) => {
         obje = JSON.parse(result);
+        firstObje = JSON.parse(result);
         for (let k = 1; k < obje[0].length - 1; k++) {
           currentPossible.push(obje[0][k]);
         }
@@ -339,6 +391,8 @@ function Algorithm() {
         testResults.push("Normal");
       }
     }
+
+    finishedOrNot();
   };
 
   return (
@@ -442,9 +496,7 @@ function Algorithm() {
             <h3 className="text-blue text-center">Current Possible Diseases</h3>
           </div>
         </div>
-        <div
-          className="row mt-5 justify-content-center"
-        >
+        <div className="row mt-5 justify-content-center">
           <div className="col-12 w-30 text-center">
             {currentPossible.map((item, index) => (
               <span
@@ -467,6 +519,38 @@ function Algorithm() {
         onCancel={handleCancel}
       >
         <h3>Please select the result of the test. </h3>
+      </Modal>
+      <Modal
+        title="Hastalık Tespit Edildi!"
+        open={isFinished}
+        onOk={handelFinishOk}
+        onCancel={handleFinishCancel}
+      >
+        <h3>{currentPossible}</h3>
+        <div className="col-12 w-25 row-1">
+          <Tooltip title="PDF olarak dışa aktar.">
+            <Button
+              onClick={() => {
+                onExport();
+              }}
+              type="primary"
+              block
+            >
+              Export PDF
+            </Button>
+          </Tooltip>
+        </div>
+      </Modal>
+      <Modal
+        title="Hata"
+        open={isFinishedWrong}
+        onOk={handleFinishWrongOk}
+        onCancel={handleFinishWrongCancel}
+      >
+        <h3>
+          Test sonuçlarında veya uygulanışında yanlışlık olabilir tekrar
+          deneyin!
+        </h3>
       </Modal>
     </>
   );
