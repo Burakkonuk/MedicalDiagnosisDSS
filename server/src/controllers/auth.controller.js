@@ -257,138 +257,252 @@ const tooarr = async (req, res) => {
 
     console.log(handWrittenData);
 
-    // const test1 = await Test.find();
-    // const prediagnoses1 = await Prediagnoses.find();
-    // console.log(test1);
-    // const testGroups = {};
-    // for (const test of test1) {
-    //   const { testGroupId, priority } = test;
+    return res.status(201).send(handWrittenData);
+  } catch (err) {
+    console.log(err);
+  }
+};
+const tooarr2 = async (req, res) => {
+  try {
+    const handWrittenData = [
+      [
+        null,
+        "ULNAR NERVE LESION AT THE WRIST",
+        "ULNAR NERVE LESION AT THE MEDIAL EPICONDYLE",
+        "ULNAR NERVE LESION IN THE CUBITAL TUNNEL",
+        "C8 RADICULOPATHY",
+        "INFERIOR TRUNK",
+        "MEDIAL CORD",
+        "SUPERFICIAL SENSORY BRANCH OF THE ULNAR NERVE LESION",
+        "Priorities",
+      ],
+      [
+        { name: "SNCS: n.medianus", testGroupName: "SNCS" },
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+      ],
+      [
+        { name: "SNCS: n. ulnaris(latency)", testGroupName: "SNCS" },
+        "P",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "P",
+      ],
+      [
+        {
+          name: "SNCS: n. ulnaris(conduction velocity)",
+          testGroupName: "SNCS",
+        },
+        "P",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "P",
+      ],
+      [
+        { name: "SNCS: n. ulnaris(SNAP)", testGroupName: "SNCS" },
+        "P",
+        "P",
+        "P",
+        "N",
+        "P",
+        "P",
+        "P",
+      ],
+      [
+        { name: "SNCS: n.radialis", testGroupName: "SNCS" },
+        "N",
+        "N",
+        "N",
+        "N/A",
+        "N",
+        "N",
+        "N",
+      ],
+      [
+        { name: "SNCS: n.ulnaris dorsal cut. branch", testGroupName: "SNCS" },
+        "N",
+        "P",
+        "P",
+        "N",
+        "P",
+        "P",
+        "N",
+      ],
+      [
+        { name: "n.cut.antebrachi medialis", testGroupName: "MNCS" },
+        "N/A",
+        "N",
+        "N",
+        "N",
+        "P",
+        "N",
+        "N",
+      ],
+      [
+        { name: "MNCS: n.ulnaris(distal latency)", testGroupName: "MNCS" },
+        "P",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+      ],
+      [
+        { name: "MNCS: n.ulnaris(CMAP)", testGroupName: "MNCS" },
+        "P",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N",
+      ],
+      [
+        { name: "MNCS: n.ulnaris(CV at the forearm)", testGroupName: "MNCS" },
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+      ],
+      [
+        { name: "MNCS: n.ulnaris(CV at the elbow)", testGroupName: "MNCS" },
+        "N",
+        "P",
+        "P",
+        "N",
+        "N",
+        "N",
+        "N",
+      ],
+      [
+        {
+          name: "inching:n.ulnaris(CV at just distal to medial epicondyl)",
+          testGroupName: "MNCS",
+        },
+        "N/A",
+        "N",
+        "P",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+      ],
+      [
+        {
+          name: "inching:n.ulnaris(CV at or just proximal to medial epicondyl)",
+          testGroupName: "MNCS",
+        },
+        "N/A",
+        "P",
+        "N",
+        "N/A",
+        "N/A",
+        "N/A",
+        "N/A",
+      ],
+      [
+        { name: "MNCS: n.medianus", testGroupName: "MNCS" },
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+        "N",
+      ],
+      [
+        { name: "m.interossei dorsalis 1", testGroupName: "EMG" },
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "N",
+      ],
+      [
+        { name: "m. Abductor digiti minimi", testGroupName: "EMG" },
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "N",
+      ],
+      [
+        { name: "m. Ext. İndicis proprius", testGroupName: "EMG" },
+        "N",
+        "N",
+        "N",
+        "P",
+        "P",
+        "N",
+        "N",
+      ],
+      [
+        { name: "m.flx.carpi ulnaris", testGroupName: "EMG" },
+        "N",
+        "P",
+        "P",
+        "P",
+        "P",
+        "P",
+        "N",
+      ],
+      [
+        { name: "EMG:m.abd.pol.brevis", testGroupName: "EMG" },
+        "N",
+        "N",
+        "N",
+        "P",
+        "P",
+        "P",
+        "N",
+      ],
+      [
+        { name: "EMG:paravertebral C8", testGroupName: "EMG" },
+        "N",
+        "N",
+        "N",
+        "P",
+        "N",
+        "N",
+        "N",
+      ],
+    ];
 
-    //   if (!testGroups[testGroupId]) {
-    //     testGroups[testGroupId] = { totalPriority: 0, testCount: 0 };
-    //   }
+    const resultArray = handWrittenData.slice(1).map((row) => {
+      const NCount = row.filter((value) => value === "N").length;
+      const PCount = row.filter((value) => value === "P").length;
+      const NACount = row.filter((value) => value === "N/A").length;
+      return ((NCount + 1) * (PCount + 1)) / (NACount + 1);
+    });
 
-    //   testGroups[testGroupId].totalPriority += priority;
-    //   testGroups[testGroupId].testCount++;
-    // }
-    // const testGroupMeans = {};
-    // for (const testGroupId in testGroups) {
-    //   const { totalPriority, testCount } = testGroups[testGroupId];
-    //   const meanPriority = totalPriority / testCount;
-    //   testGroupMeans[testGroupId] = meanPriority;
-    // }
-    //test1.sort((a, b) => b.priority - a.priority);
-
-    // const testGroups1 = {};
-
-    // for (const test of test1) {
-    //   const { testGroupId } = test;
-
-    //   if (!testGroups1[testGroupId]) {
-    //     testGroups1[testGroupId] = [];
-    //   }
-
-    //   testGroups1[testGroupId].push(test);
-    // }
-
-    // const result = [];
-
-    // for (const testGroupId in testGroups1) {
-    //   if (testGroups1.hasOwnProperty(testGroupId)) {
-    //     result.push(testGroups1[testGroupId]);
-    //   }
-    // }
-    // result.sort((a, b) => {
-    //   const testGroupIdA = a[0].testGroupId;
-    //   const testGroupIdB = b[0].testGroupId;
-    //   const valueA = testGroupMeans[testGroupIdA];
-    //   const valueB = testGroupMeans[testGroupIdB];
-
-    //   return valueB - valueA;
-    // });
-    // const matrix = [];
-
-    // const firstRow = [""];
-    // for (const x of result) {
-    //   for (const y of x) {
-    //     firstRow.push(y.name);
-    //   }
-    // }
-    // matrix.push(firstRow);
-
-    // for (const prediagnosis of prediagnoses1) {
-    //   const row = [prediagnosis.name];
-
-    //   for (let i = 0; i < test1.length; i++) {
-    //     row.push("");
-    //   }
-
-    //   matrix.push(row);
-    //}
-
-    // function readExcelData(filePath) {
-    //   const workbook = XLSX.readFile(filePath);
-    //   const firstSheetName = workbook.SheetNames[0];
-    //   const worksheet = workbook.Sheets[firstSheetName];
-    //   const range = XLSX.utils.decode_range(worksheet["!ref"]);
-    //   const numRows = range.e.r + 1;
-    //   const numCols = range.e.c + 1;
-    //   const data = [];
-
-    //   for (let i = 5; i < numRows; i++) {
-    //     const rowData = [];
-    //     for (let j = 1; j < numCols; j++) {
-    //       const cellAddress = XLSX.utils.encode_cell({ r: i, c: j });
-    //       const cellValue = worksheet[cellAddress]?.v;
-    //       rowData.push(cellValue);
-    //     }
-    //     data.push(rowData);
-    //   }
-
-    //   return data;
-    // }
-    // function newAlgorithm(){
-    //   const combinedMatrix = [];
-    //   // Add the rows with diagnoses and test results
-    //   for (let i = 0; i < excelData.length; i++) {
-    //     const dataRow = [
-
-    //       i < test1.length ? test1[i].name : '',
-    //       ...excelData[i]
-    //     ];
-    //     combinedMatrix.push(dataRow);
-    //   }
-
-    //   // Add the header row with empty first cell
-    //   const headerRow = [
-    //     '',
-    //     ...prediagnoses1.map(obj => obj.name)
-    //   ];
-    //   combinedMatrix.unshift(headerRow);
-
-    //   // Print the combined matrix
-    //   console.log(combinedMatrix);
-    // }
-
-    // // Excel verilerini oku ve 2 boyutlu diziye aktar
-    // const excelData = readExcelData(excelFilePath);
-
-    // // 2 boyutlu dizideki verileri kontrol et
-    // newAlgorithm();
-    // for (let i = 0; i < excelData.length; i++) {
-    //   for (let j = 0; j < excelData[i].length; j++) {
-    //     if (excelData[i][j] === undefined) {
-    //       excelData[i][j] = "N/A";
-    //     }
-    //   }
-    // }
+    for (let i = 0; i < resultArray.length; i++) {
+      handWrittenData[i + 1].push(resultArray[i]);
+    }
 
     return res.status(201).send(handWrittenData);
   } catch (err) {
     console.log(err);
   }
 };
-
 const getUserById = async (req, res) => {
   try {
     console.log(req.user);
@@ -412,4 +526,5 @@ module.exports = {
   addStrategy,
   tooarr,
   getUserById,
+  tooarr2,
 };

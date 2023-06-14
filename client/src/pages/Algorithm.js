@@ -19,6 +19,7 @@ import "jspdf-autotable";
 import "../App.css";
 var obje = "";
 var firstObje = "";
+var dataset = 1;
 var foundTestGroupNames = []; // TEST GROUPS TO BE DONE.
 var currentTestGroup = "";
 var testsToExport = [];
@@ -26,6 +27,8 @@ var testResults = [];
 var currentPossible = [];
 var testCounter = 0;
 var finalDisease = "";
+var testGroupPriorities = [];
+var boolean1 = true;
 function Algorithm() {
   const [result, setResult] = useState([]);
   const [test, setTest] = useState("");
@@ -37,6 +40,7 @@ function Algorithm() {
   const [selectedKey, setSelectedKey] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [isFinishedWrong, setIsFinishedWrong] = useState(false);
+  const [currentDataset, setCurrentDataset] = useState({});
   let testsToBeDone = [];
   let navigate = useNavigate();
   function deleteColumn(matrix, columnIndex) {
@@ -91,8 +95,11 @@ function Algorithm() {
 
     for (let index = 0; index < columnsToBeDeleted.length; index++) {
       objectToChange = deleteColumn(objectToChange, columnsToBeDeleted[index]);
-      if (columnsToBeDeleted[index + 1] != null) {
-        columnsToBeDeleted[index + 1] = columnsToBeDeleted[index + 1] - 1;
+      console.log(columnsToBeDeleted[index]);
+      for (let j = index; j < columnsToBeDeleted.length; j++) {
+        if (columnsToBeDeleted[j + 1] != null) {
+          columnsToBeDeleted[j + 1] = columnsToBeDeleted[j + 1] - 1;
+        }
       }
     }
 
@@ -116,7 +123,8 @@ function Algorithm() {
       }
     } else {
       findTestGroups(obje);
-      currentTestGroup = foundTestGroupNames[0];
+      currentTestGroup = foundTestGroupNames[0]; // --------------------------------
+
       console.log(obje);
       for (let i = 1; i < obje.length; i++) {
         if (obje[i][0].testGroupName === currentTestGroup) {
@@ -196,10 +204,16 @@ function Algorithm() {
 
   const handleFinishWrongCancel = () => {
     setIsFinishedWrong(false);
-    navigate(0);
   };
   const handleFinishWrongOk = () => {
     setIsFinishedWrong(false);
+  };
+  const handleChangeDataset = () => {
+    localStorage.setItem("dataset", "1");
+    navigate(0);
+  };
+  const handleChangeDataset2 = () => {
+    localStorage.setItem("dataset", "2");
     navigate(0);
   };
 
@@ -259,10 +273,10 @@ function Algorithm() {
       });
       doc.setTextColor("red");
       doc.setFontSize(12);
-      doc.text(20, 155, "Final Disease");
-      doc.text(20, 160, finalDisease);
+      doc.text(20, 250, "Final Disease");
+      doc.text(20, 255, finalDisease);
     }
-    doc.save();
+    doc.save("Test Results");
   };
 
   useEffect(() => {
@@ -274,8 +288,15 @@ function Algorithm() {
       headers: myHeaders,
       redirect: "follow",
     };
+    var apiUrl = "";
+    if (localStorage.getItem("dataset") === "1") {
+      apiUrl = "http://localhost:5000/temp";
+    }
+    if (localStorage.getItem("dataset") === "2") {
+      apiUrl = "http://localhost:5000/temp2";
+    }
 
-    fetch("http://localhost:5000/temp", requestOptions)
+    fetch(apiUrl, requestOptions)
       .then((response) => response.text())
       .then((result) => {
         obje = JSON.parse(result);
@@ -325,6 +346,9 @@ function Algorithm() {
           const meanPriority =
             filteredRows.reduce((sum, row) => sum + row[prioritiesIndex], 0) /
             filteredRows.length;
+
+          testGroupPriorities.push([testGroup, meanPriority]);
+          console.log(testGroupPriorities);
 
           // Check if the mean priority in the current test group is the new highest mean priority
           if (meanPriority > highestMeanPriority) {
@@ -398,6 +422,8 @@ function Algorithm() {
   return (
     <>
       <div className="container-fluid p-5">
+        <Button onClick={handleChangeDataset}>Dataset 1</Button>
+        <Button onClick={handleChangeDataset2}>Dataset 2</Button>
         <div className="row mb-5">
           <div className="col-12">
             <h3 className="text-light text-center">
