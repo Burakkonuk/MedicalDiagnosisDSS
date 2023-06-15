@@ -422,8 +422,12 @@ function Algorithm() {
   return (
     <>
       <div className="container-fluid p-5">
-        <Button onClick={handleChangeDataset}>Dataset 1</Button>
-        <Button onClick={handleChangeDataset2}>Dataset 2</Button>
+        <Tooltip title="Numbness of the anterior/lateral part of the thigh">
+          <Button onClick={handleChangeDataset}>Dataset 1</Button>
+        </Tooltip>
+        <Tooltip title="Numbness Of The Ulnar Fingers (4-5)">
+          <Button onClick={handleChangeDataset2}>Dataset 2</Button>
+        </Tooltip>
         <div className="row mb-5">
           <div className="col-12">
             <h3 className="text-light text-center">
